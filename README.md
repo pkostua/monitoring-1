@@ -55,3 +55,9 @@ Nagios: Обычно работает по модели pull
 Гибридные модели:  
 Zabbix: Как упоминалось, в основном использует pull, но также поддерживает push через Zabbix Sender.  
 VictoriaMetrics: Поддерживает как pull, так и push модели.  
+
+### 8. Скриншот с метриками CPU
+![image](https://github.com/user-attachments/assets/784ffa52-75e2-4b33-b49a-e46f1645e3b6)
+
+### 9. Список метрик, в том числе связанных с docker
+![image](https://github.com/user-attachments/assets/37761bf0-226a-4389-a467-219836a37524)
