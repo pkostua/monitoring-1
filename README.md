@@ -61,3 +61,56 @@ VictoriaMetrics: Поддерживает как pull, так и push модел
 
 ### 9. Список метрик, в том числе связанных с docker
 ![image](https://github.com/user-attachments/assets/37761bf0-226a-4389-a467-219836a37524)
+
+### 1*. Сбор метрик скриптом в лог
+#### a. Скрипт
+```
+import os
+import json
+import time
+from datetime import datetime
+
+def collect():
+    metrics = {}
+    timestamp = int(time.time())
+    metrics['timestamp'] = timestamp
+
+    with open('/proc/loadavg', 'r') as f:
+        loadavg = f.read().strip().split()
+        metrics['load_1m'] = float(loadavg[0])
+        metrics['load_5m'] = float(loadavg[1])
+        metrics['load_15m'] = float(loadavg[2])
+
+    with open('/proc/meminfo', 'r') as f:
+        for line in f:
+            if line.startswith('MemTotal:'):
+                metrics['mem_total'] = int(line.split()[1])
+            elif line.startswith('MemAvailable:'):
+                metrics['mem_available'] = int(line.split()[1])
+
+    with open(f"/proc/uptime", "r") as f:
+        uptime = f.read().split()
+        metrics['uptime'] = uptime[0]
+
+    return metrics
+
+def writeToLog(metrics):
+    today = datetime.now()
+    logFilename = f"/home/ubuntu/{today.strftime('%y-%m-%d')}-awesome-monitoring.log"
+
+    with open(logFilename, 'a') as logFile:
+        logFile.write(json.dumps(metrics) + '\n')
+
+if __name__ == "__main__":
+    collected_metrics = collect()
+    writeToLog(collected_metrics)
+```
+
+#### б. Cron
+```
+* * * * * python3 /home/ubuntu/metrics.py
+```
+#### в. Лог
+![image](https://github.com/user-attachments/assets/31678f80-8af0-4199-b35a-8ec1c9c1c1de)
+
+
