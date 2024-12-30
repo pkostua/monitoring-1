@@ -102,8 +102,8 @@ def writeToLog(metrics):
         logFile.write(json.dumps(metrics) + '\n')
 
 if __name__ == "__main__":
-    collected_metrics = collect()
-    writeToLog(collected_metrics)
+    metrics = collect()
+    writeToLog(metrics)
 ```
 
 #### б. Cron
